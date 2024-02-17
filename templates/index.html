@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{url_for('static', filename=" fonts
+    /style.css")}"/>
+    <title>Hi!</title>
+</head>
+<body>
+{% set user = ['wow', 'aaa', 'lol'] %}
+<ul>
+{% for i in user %}
+    <li>
+        {{ loop.index }} - {{ i }}
+        {% if loop.first %} первый
+        {% elif loop.second %} второй
+        {% endif %}
+    </li>
+{% endfor %}
+
+</ul>
+</body>
+</html>
