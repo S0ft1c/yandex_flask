@@ -1,0 +1,21 @@
+{% extends "base1.html" %}
+
+
+{% block content %}
+
+    <h1>Загрузить новый файл</h1>
+    <form method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.image }}
+        </p>
+        <p>
+            {{ form.submit(type="submit", class="btn btn-primary") }}
+        </p>
+    </form>
+
+    {% for img in images %}
+        <img src="{{ img }}" width="500 " height="500"><br>
+
+    {% endfor %}
+{% endblock %}
