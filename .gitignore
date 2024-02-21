@@ -1,5 +1,4 @@
-*.jpg
-*.png
-*.jpg
+./static/uploads/*.jpg
+./static/uploads/*.png
 .idea
 .git
