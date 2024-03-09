@@ -9,7 +9,7 @@ from forms.loginform import LoginForm
 from forms.news import NewsForm
 from blueprint import news_api
 from flask_restful import Api, reqparse, abort, Resource
-from blueprint import news_resources
+from blueprint import news_resources, user_resources
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandex_123'
@@ -175,5 +175,9 @@ if __name__ == "__main__":
 
     api.add_resource(news_resources.NewsListResources, '/api/v2/news')
     api.add_resource(news_resources.NewsResource, '/api/v2/news/<int:news_id>')
+
+    # user
+    api.add_resource(user_resources.UsersListResources, '/api/v2/users')
+    api.add_resource(user_resources.UserResource, '/api/v2/users/<int:user_id>')
 
     app.run(port=8080, host='127.0.0.1')

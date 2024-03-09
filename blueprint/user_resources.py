@@ -7,8 +7,8 @@ from .reqparse import user_parser
 
 def abort_if_not_found(user_id):
     sess = db_session.create_session()
-    news = sess.query(User).get(user_id)
-    if not news:
+    users = sess.query(User).get(user_id)
+    if not users:
         abort(404, message=f'User {user_id} not found')
 
 
@@ -16,23 +16,23 @@ class UserResource(Resource):
     def get(self, user_id):
         abort_if_not_found(user_id)
         sess = db_session.create_session()
-        news = sess.query(User).get(user_id)
-        if not news:
+        users = sess.query(User).get(user_id)
+        if not users:
             return make_response(jsonify({'error': 'Not found'}), 404)
         return jsonify(
             {
-                'news': news.to_dict(only=(
-                    'name', 'about', 'email'))
+                'users': users.to_dict(only=(
+                    'name', 'about', 'email', 'hashed_password', 'created_date'))
             }
         )
 
     def delete(self, user_id):
         abort_if_not_found(user_id)
         db_sess = db_session.create_session()
-        news = db_sess.query(User).get(user_id)
-        if not news:
+        users = db_sess.query(User).get(user_id)
+        if not users:
             return make_response(jsonify({'error': 'Not found'}), 404)
-        db_sess.delete(news)
+        db_sess.delete(users)
         db_sess.commit()
         return jsonify({'success': 'OK'})
 
@@ -40,12 +40,12 @@ class UserResource(Resource):
 class UsersListResources(Resource):
     def get(self):
         db_sess = db_session.create_session()
-        news = db_sess.query(User).all()
+        users = db_sess.query(User).all()
         return jsonify(
             {
-                'news':
-                    [item.to_dict(only=('title', 'content', 'user.name'))
-                     for item in news]
+                'users':
+                    [item.to_dict(only=('name', 'about', 'email', 'hashed_password', 'created_date'))
+                     for item in users]
             }
         )
 
@@ -55,7 +55,9 @@ class UsersListResources(Resource):
         users = User(
             name=args['name'],
             about=args['about'],
-            email=args['email']
+            email=args['email'],
+            hashed_password=args['hashed_password'],
+            created_date=args['created_date'],
         )
         db_sess.add(users)
         db_sess.commit()
