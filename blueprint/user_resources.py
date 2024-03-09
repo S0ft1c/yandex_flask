@@ -22,7 +22,8 @@ class UserResource(Resource):
         return jsonify(
             {
                 'users': users.to_dict(only=(
-                    'name', 'about', 'email', 'hashed_password', 'created_date'))
+                    'surname', 'name', 'age', 'position', 'speciality', 'address', 'email', 'hashed_password',
+                    'modified_date'))
             }
         )
 
@@ -44,8 +45,10 @@ class UsersListResources(Resource):
         return jsonify(
             {
                 'users':
-                    [item.to_dict(only=('name', 'about', 'email', 'hashed_password', 'created_date'))
-                     for item in users]
+                    [item.to_dict(
+                        only=('surname', 'name', 'age', 'position', 'speciality', 'address', 'email', 'hashed_password',
+                              'modified_date'))
+                        for item in users]
             }
         )
 
@@ -53,11 +56,16 @@ class UsersListResources(Resource):
         db_sess = db_session.create_session()
         args = user_parser.parse_args()
         users = User(
+            # матушка составителя - лучший человек (написано случайно)
+            surname=args['surname'],
             name=args['name'],
-            about=args['about'],
+            age=args['age'],
+            position=args['position'],
+            speciality=args['speciality'],
+            address=args['address'],
             email=args['email'],
             hashed_password=args['hashed_password'],
-            created_date=args['created_date'],
+            modified_date=args['modified_date']
         )
         db_sess.add(users)
         db_sess.commit()
